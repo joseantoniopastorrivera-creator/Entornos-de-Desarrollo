@@ -1,0 +1,84 @@
+' ===========================================================================
+' Autor: José Antonio Pastor Rivera
+' Fecha: 09/03/2026
+' Actividad: RA5a - Del diagrama al código (Logística)
+' Descripción: Diseño UML de la estructura de clases del sistema.
+' Representa visualmente el encapsulamiento estricto y las relaciones de 
+' herencia, composición, agregación y asociación exigidas en la rúbrica de evaluación.
+' ===========================================================================
+
+@startuml DiagramaLogistica
+' NOTA TÉCNICA: Se establece el tamaño de los iconos a 0 para ocultar los símbolos de colores.
+' Así garantizamos que se impriman los caracteres estándar de visibilidad (+, -, #). Se adjunta
+' una foto tambien suponiento que no se hubiese aplicado la siguiente linea de código
+skinparam classAttributeIconSize 0
+
+class Paquete {
+    - id: String
+    - peso: double
+    - destino: String
+    + Paquete(id: String, peso: double, destino: String)
+    + getId(): String
+    + setId(id: String): void
+    + getPeso(): double
+    + setPeso(peso: double): void
+    + getDestino(): String
+    + setDestino(destino: String): void
+}
+
+class PaqueteFragil {
+    - seguro: double
+    + PaqueteFragil(id: String, peso: double, destino: String, seguro: double)
+    + getSeguro(): double
+    + setSeguro(seguro: double): void
+}
+
+class PaqueteUrgente {
+    - prioridad: int
+    + PaqueteUrgente(id: String, peso: double, destino: String, prioridad: int)
+    + getPrioridad(): int
+    + setPrioridad(prioridad: int): void
+}
+
+class GPS {
+    - coordenadas: String
+    + GPS(coordenadas: String)
+    + getCoordenadas(): String
+    + setCoordenadas(coordenadas: String): void
+}
+
+class Conductor {
+    - nombre: String
+    - licencia: String
+    + Conductor(nombre: String, licencia: String)
+    + getNombre(): String
+    + setNombre(nombre: String): void
+    + getLicencia(): String
+    + setLicencia(licencia: String): void
+}
+
+class Camion {
+    - matricula: String
+    - capacidad: double
+    - gps: GPS
+    - conductor: Conductor
+    - paquetes: List<Paquete>
+    + Camion(matricula: String, capacidad: double)
+    + getMatricula(): String
+    + setMatricula(matricula: String): void
+    + getCapacidad(): double
+    + setCapacidad(capacidad: double): void
+    + getGps(): GPS
+    + getConductor(): Conductor
+    + setConductor(conductor: Conductor): void
+    + getPaquetes(): List<Paquete>
+    + cargarPaquete(p: Paquete): void
+}
+
+Paquete <|-- PaqueteFragil
+Paquete <|-- PaqueteUrgente
+Camion *-- "1" GPS : Composición
+Camion o-- "*" Paquete : Agregación
+Camion --> "1" Conductor : Asociación
+
+@enduml

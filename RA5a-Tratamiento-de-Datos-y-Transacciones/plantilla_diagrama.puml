@@ -1,0 +1,48 @@
+@startuml DiagramaLogistica
+' -----------------------------------------------------------
+' CONFIGURACIÓN VISUAL
+' Esto hace que el diagrama se vea más limpio y profesional.
+' -----------------------------------------------------------
+'skinparam classAttributeIconSize 0
+'skinparam monochrome true
+'skinparam linetype ortho
+'hide circle
+
+' -----------------------------------------------------------
+' ZONA DE CLASES
+' Define aquí tus clases con sus atributos y métodos.
+' Fíjate en el ejemplo de 'Paquete' para la sintaxis.
+' -----------------------------------------------------------
+
+' EJEMPLO: Clase base (ya la tienes hecha)
+class Paquete {
+    ' Atributos (- es private)
+    - id : String
+    - peso : double
+    - destino : String
+    
+    ' Constructor y métodos (+ es public)
+    + Paquete(id : String, peso : double, destino : String)
+    + getPeso() : double
+    + setPeso(p : double) : void
+}
+
+' --- TUS CLASES A CONTINUACIÓN ---
+
+
+
+
+' ---------------------------------------------------------------------------
+' ZONA DE RELACIONES
+' Aquí es donde debes pensar. ¿Quién usa a quién?
+' Usa: <|-- (Herencia), *-- (Composición), o-- (Agregación), --> (Asociación)
+' ---------------------------------------------------------------------------
+
+' Ejemplo: Un coche tiene 4 ruedas (Composición)
+' Coche *-- "4" Rueda (válido si tuviéramos la clase Rueda)
+
+' --- TUS RELACIONES A CONTINUACIÓN ---
+
+
+
+@enduml
