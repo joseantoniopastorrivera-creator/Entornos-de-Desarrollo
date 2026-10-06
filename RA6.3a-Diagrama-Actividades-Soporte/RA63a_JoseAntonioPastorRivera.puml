@@ -1,0 +1,42 @@
+' Autor: José Antonio Pastor Rivera
+' Fecha: 15/04/2026
+' Actividad: RA6.3a - Soporte técnico por niveles
+' Descripción: Diagrama de actividades. Representa la evolución profesional 
+' de los diagramas de flujo clásicos, modelando las acciones y nodos de 
+' decisión de un proceso de negocio departamental.
+
+@startuml DiagramaSoporte
+title RA6.3a - Soporte técnico por niveles
+' NOTA: Mantenemos la exigencia visual monocroma.
+skinparam monochrome true
+
+' NOTA: Nodo de inicio. El punto negro indica 
+' inequívocamente dónde empieza el proceso (start).
+start
+
+' NOTA: Acciones (rectángulos redondeados). Representan los pasos 
+' individuales del proceso utilizando verbos en infinitivo.
+:Recibir Llamada del Cliente;
+:Identificar el problema;
+
+' NOTA: Nodo de decisión (rombo). Plantea un camino 
+' alternativo basado en una condición, funcionando como el clásico if/else.
+if (¿Es un problema conocido?) then (Sí)
+    :Aplicar la solución estándar;
+else (No)
+    ' NOTA: Flujo alternativo para la resolución de averías complejas.
+    :Derivar a Soporte Nivel 2;
+    :Investigar el problema complejo;
+    :Aplicar la solución;
+endif
+
+' NOTA: Evitamos duplicar la acción "Cerrar el ticket" dentro 
+' de cada rama del if/else. Unificar el flujo antes del fin demuestra un 
+' diseño lógico óptimo sin repeticiones ni "callejones sin salida".
+:Cerrar el ticket;
+
+' NOTA: Nodo de fin. El círculo negro con borde indica 
+' dónde termina el proceso de forma definitiva (stop).
+stop
+
+@enduml
