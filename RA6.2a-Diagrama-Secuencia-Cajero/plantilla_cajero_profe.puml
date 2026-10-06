@@ -1,0 +1,14 @@
+@startuml
+skinparam monochrome true
+autonumber
+
+actor Cliente
+participant Cajero
+database Banco
+
+Cliente -> Cajero : introducirTarjeta()
+activate Cajero
+
+' Continúa a partir de aquí... Recuerda las flechas de retorno -->>
+
+@enduml

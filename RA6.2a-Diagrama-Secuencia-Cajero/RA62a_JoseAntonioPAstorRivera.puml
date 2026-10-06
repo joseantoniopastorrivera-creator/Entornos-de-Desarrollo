@@ -1,0 +1,67 @@
+' Autor: José Antonio Pastor Rivera
+' Fecha: 09/04/2026
+' Actividad: RA6.2a - El cajero automático
+' Descripción: Este diagrama de secuencia funciona como el "guión" de una obra 
+' de teatro: indica qué actor o sistema habla y en qué momento exacto para 
+' evitar fallos críticos en el orden cronológico.
+
+
+@startuml DiagramaCajero
+' NOTA: Formato monocromo para un diseño limpio y profesional.
+skinparam monochrome true
+
+' NOTA: Sin la directiva 'autonumber', la trazabilidad del diagrama 
+' sería nula en sistemas complejos. Su uso garantiza que cualquier desarrollador 
+' pueda seguir el flujo cronológico sin ambigüedades.
+autonumber
+
+' PARTICIPANTES: Representan el tiempo que el objeto existe (Línea de vida).
+' NOTA: El uso de 'database' para el Banco en lugar de un 
+' 'participant' genérico aporta una semántica superior, identificando 
+' claramente dónde reside la persistencia de los datos de seguridad.
+actor Cliente
+participant Cajero
+database Banco
+
+' --- 1) Inicio de la transacción ---
+' NOTA: Mensaje síncrono (flecha continua). El emisor envía el 
+' mensaje y se queda esperando a que el receptor termine de procesarlo.
+Cliente -> Cajero : introducirTarjeta()
+
+' NOTA: Se ha optado por 'activate' inmediatamente tras la llamada. 
+' Sin estos focos de control (activación), el diagrama parecería un boceto informal; 
+' al incluirlos, representamos con precisión el tiempo de proceso del Cajero.
+activate Cajero
+
+' NOTA: Mensaje de retorno (flecha discontinua). Es la respuesta 
+' que devuelve un valor o una confirmación.
+Cajero -->> Cliente : pedirPIN()
+
+' --- 2) Validación de credenciales ---
+Cliente -> Cajero : teclearPIN()
+Cajero -> Banco : validarPIN()
+activate Banco
+Banco -->> Cajero : "PIN Correcto"
+deactivate Banco 
+
+' --- 3) Operación de retirada ---
+Cliente -> Cajero : retirar(50€)
+Cajero -> Banco : comprobarSaldo(50€)
+activate Banco
+
+' --- 4) Fragmentos combinados (Marcos lógicos) ---
+' NOTA: Bloque 'alt' (alternativa). Funciona como un if/else con 
+' dos caminos excluyentes según la condición: Hay saldo vs No hay saldo.
+alt Hay saldo
+    Banco -->> Cajero : "OK"
+    Cajero -->> Cliente : entregarBilletes()
+else No hay saldo
+    Banco -->> Cajero : "Error"
+    Cajero -->> Cliente : mostrarError("Sin fondos")
+end
+
+' NOTA: Cierre de los focos de control al terminar la secuencia.
+deactivate Banco
+deactivate Cajero
+
+@enduml
