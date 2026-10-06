@@ -1,0 +1,67 @@
+' ===========================================================================
+' Autor: José Antonio Pastor Rivera
+' Fecha: 19/03/2026
+' Actividad: RA6.1b - El ERP del hospital
+' Descripción: Diagrama de Casos de Uso. Modela el control de accesos mediante
+' herencia de actores, además de representar actores secundarios externos
+' y relaciones de extensión (<<extend>>) condicionales.
+' ===========================================================================
+
+@startuml PlantillaHospital
+' NOTA TÉCNICA: Se activa el modo monocromo (blanco y negro) para eliminar los 
+' colores por defecto de PlantUML. Esto genera un diagrama visualmente más 
+' limpio, formal y estrictamente alineado con el estándar UML clásico.
+skinparam monochrome true
+
+' NOTA TÉCNICA: Modifica la orientación del diagrama de vertical a horizontal. 
+' Esta disposición de izquierda a derecha es el estándar recomendado para los 
+' Diagramas de Casos de Uso, situando a los actores en el exterior y facilitando 
+' la lectura natural de las interacciones con el límite del sistema.
+left to right direction
+
+actor "Personal médico" as PersonalBase
+actor "Enfermero" as Enf
+actor "Medico" as Med
+actor "Farmacia estatal" as Farmacia
+
+' NOTA TÉCNICA: Declaración del límite del sistema y sus casos de uso. 
+' Se aplican alias (UC_Nombre) a cada elemento y se utilizan estrictamente 
+' verbos en infinitivo para definir las acciones, cumpliendo el criterio CE2.
+rectangle "ERP hospitalario" {
+    usecase "Consultar historial" as UC_Consultar
+    usecase "Registrar constantes" as UC_Registrar
+    usecase "Recetar medicamento" as UC_Recetar
+    usecase "Diagnosticar" as UC_Diagnosticar
+    usecase "Emitir alerta de alergia" as UC_Alertar
+}
+
+' Herencia de Actores
+' NOTA TÉCNICA: Herencia (Generalización) de actores. 
+' El Enfermero y el Médico heredan del PersonalBase. Por tanto, adquieren 
+' automáticamente el permiso para "Consultar historial" sin necesidad de 
+' dibujarles flechas directas adicionales, optimizando la lectura.
+PersonalBase <|-- Enf
+PersonalBase <|-- Med
+
+' Asociaciones Principales 
+' NOTA TÉCNICA: Asociaciones de comunicación (Communication path).
+' Indican qué actor tiene el privilegio de iniciar cada proceso primario.
+PersonalBase --> UC_Consultar
+Enf --> UC_Registrar
+Med --> UC_Recetar
+Med --> UC_Diagnosticar
+
+' Actores Secundarios
+' NOTA TÉCNICA: Interacción con un actor secundario externo (Farmacia estatal).
+' El sistema es el que inicia la comunicación hacia el actor externo cuando 
+' el médico receta el medicamento, de ahí la dirección de la asociación.
+UC_Recetar --> Farmacia
+
+' Relaciones de Extensión (Opcionales) 
+' NOTA TÉCNICA: Relación de Extensión (Estereotipo <<extend>>).
+' Modela un comportamiento condicional (solo si el paciente es alérgico). 
+' La flecha nace en el caso extensor (Alerta) y apunta al caso base (Recetar),
+' cumpliendo el criterio CE4 de estructuras complejas.
+UC_Alertar ..> UC_Recetar : <<extend>>
+
+@enduml
