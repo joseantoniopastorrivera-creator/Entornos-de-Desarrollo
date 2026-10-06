@@ -1,0 +1,82 @@
+' Autor: José Antonio Pastor Rivera
+' Fecha: 09/04/2026
+' Actividad: RA6.2b - Reserva de vuelos con fallos
+' Descripción: Este diagrama de secuencia actúa como el "guion" de la obra:
+' indica qué actor o sistema habla y en qué momento exacto para evitar 
+' fallos críticos, como confirmar una plaza sin haber procesado el pago.
+
+@startuml DiagramaVuelos
+' NOTA: Se mantiene el estándar visual monocromo para un acabado formal.
+skinparam monochrome true
+
+' NOTA: Autonumber asegura el orden cronológico del guion. 
+' Sin esta directiva, la trazabilidad de los mensajes en un sistema con 
+' múltiples participantes (Pasarela, Aerolínea, App) sería confusa.
+autonumber
+
+' PARTICIPANTES: Representan la "Línea de vida" (el tiempo que el objeto existe).
+actor Pasajero
+participant "App Vuelos" as App
+participant Aerolinea
+participant PasarelaPago
+
+' 1). Búsqueda de Vuelos (Fragmento combinado 'loop')
+' NOTA: Se emplea un bloque 'loop' (bucle) que repite los mensajes 
+' de su interior hasta que el pasajero encuentra el vuelo deseado.
+loop Hasta encontrar vuelo
+    ' NOTA TÉCNICA: Mensaje síncrono (flecha continua). El Pasajero envía 
+    ' la petición y se queda esperando a que la App termine de procesar.
+    Pasajero -> App : buscarVuelo()
+    
+    ' NOTA: Foco de control (activación). Indica que la App 
+    ' está "pensando" o procesando la búsqueda y no está inactiva.
+    activate App
+    
+    App -> Aerolinea : consultarVuelos()
+    activate Aerolinea
+    
+    ' NOTA: Mensaje de retorno (flecha discontinua). Respuesta que 
+    ' devuelve la confirmación o los datos (lista de vuelos).
+    Aerolinea -->> App : listaVuelos
+    deactivate Aerolinea
+    
+    App -->> Pasajero : mostrarLista()
+    deactivate App
+end
+
+' 2). Selección e Inicio de Pago
+' NOTA: Este paso ocurre FUERA del bucle. Es vital para evitar 
+' el "fallo crítico" de iniciar procesos de pago durante la fase de búsqueda.
+Pasajero -> App : seleccionarVuelo()
+activate App
+
+App -> PasarelaPago : procesarPago(datosTarjeta)
+activate PasarelaPago
+
+' 3). Validación y Emisión (Fragmento combinado 'alt')
+' NOTA: Bloque 'alt' (alternativa). Funciona como un if/else para 
+' modelar dos futuros excluyentes: el éxito o el fallo del pago.
+alt Pago Exitoso
+    PasarelaPago -->> App : "OK"
+    
+    ' NOTA: Si el pago es correcto, la App inicia una nueva 
+    ' interacción síncrona con la Aerolínea para la emisión final.
+    App -> Aerolinea : confirmarPlaza()
+    activate Aerolinea
+    Aerolinea -->> App : billeteVirtual
+    deactivate Aerolinea
+    
+    App -->> Pasajero : entregarBillete(billeteVirtual)
+    
+else Pago Fallido
+    ' NOTA: Respuesta de error de la pasarela.
+    PasarelaPago -->> App : "Error"
+    
+    App -->> Pasajero : mostrarError("Tarjeta rechazada")
+end
+
+' NOTA: Cierre final de los focos de control para liberar el sistema.
+deactivate PasarelaPago
+deactivate App
+
+@enduml
