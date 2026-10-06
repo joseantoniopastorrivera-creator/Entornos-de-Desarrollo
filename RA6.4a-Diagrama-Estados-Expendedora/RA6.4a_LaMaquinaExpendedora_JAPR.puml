@@ -1,0 +1,40 @@
+' Autor: José Antonio Pastor Rivera
+' Fecha: 20/04/2026
+' Actividad: RA6.4a - Máquina Expendedora
+' Descripción: Diagrama de estados que representa el proceso de compra en una
+' máquina expendedora. Refleja cómo cambia de estado según las acciones del
+' usuario, aplicando la lógica de control de stock y permitiendo cancelaciones.
+
+@startuml DiagramaExpendedora
+title RA6.4a - Ciclo de vida de la máquina expendedora sin 'hide empty description'
+
+' Se mantiene el formato visual requerido.
+skinparam monochrome true
+' He incluido 'hide empty description' para que el diagrama tenga un acabado más 
+' limpio, ya que elimina el recuadro en blanco innecesario que aparece dentro 
+' de los estados cuando no definimos acciones internas (como entry o exit).
+' hide empty description
+
+' Nodo de inicio
+[*] --> EsperandoMoneda
+
+' 1. Transición Inicial
+' El estado utiliza un gerundio ("EsperandoMoneda")
+'  y el evento utiliza un verbo ("insertar moneda").
+EsperandoMoneda --> SeleccionandoProducto : insertar moneda
+
+' 2. Transición Condicionada (Control de Stock)
+' Se ha aplicado una condición de guarda [hay stock] para validar la disponibilidad 
+' del refresco antes de permitir la entrega, asegurando un flujo lógico y realista.
+SeleccionandoProducto --> Entregando : elegir producto [hay stock]
+
+' 3. Retorno a Inicio (Reset)
+Entregando --> EsperandoMoneda : finalizar
+
+' --- 4. Flujo Alternativo (Cancelación) ---
+' NOTA: Anticipación de errores/acciones del usuario. 
+' Modela la realidad permitiendo abortar la operación sin dejar el sistema 
+' en un "callejón sin salida".
+SeleccionandoProducto --> EsperandoMoneda : pulsar botón cancelar
+
+@enduml
