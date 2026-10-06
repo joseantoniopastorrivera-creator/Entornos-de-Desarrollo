@@ -1,0 +1,59 @@
+' ===========================================================================
+' Autor: José Antonio Pastor Rivera
+' Fecha: 12/03/2026
+' Actividad: RA5b - Del código al diagrama (Ingeniería Inversa)
+' Descripción: Diseño UML generado a partir del análisis del código fuente
+' de un taller mecánico. Refleja estrictamente el encapsulamiento y las
+' relaciones de herencia, composición y dependencia encontradas en Java.
+' ===========================================================================
+
+@startuml DiagramaTaller
+' NOTA TÉCNICA: Se establece el tamaño de los iconos a 0 para ocultar los símbolos de colores.
+' Así garantizamos que se impriman los caracteres estándar de visibilidad (+, -, #),
+' evidenciando el cumplimiento estricto del encapsulamiento exigido en la rúbrica.
+skinparam classAttributeIconSize 0
+
+abstract class Vehiculo {
+    # matricula: String
+    + Vehiculo(matricula: String)
+    + {abstract} arrancar(): void
+    + getMatricula(): String
+    + setMatricula(matricula: String): void
+}
+
+class Coche {
+    - motor: Motor
+    + Coche(matricula: String, caballos: int)
+    + arrancar(): void
+    + getMotor(): Motor
+}
+
+class Motor {
+    - caballos: int
+    - encendido: boolean
+    + Motor(caballos: int)
+    + encender(): void
+    + getCaballos(): int
+    + setCaballos(caballos: int): void
+    + isEncendido(): boolean
+}
+
+class Mecanico {
+    - nombre: String
+    + Mecanico(nombre: String)
+    + reparar(c: Coche): void
+    + getNombre(): String
+    + setNombre(nombre: String): void
+}
+
+' --- RELACIONES EXIGIDAS ---
+' Herencia: Coche hereda de la clase abstracta Vehiculo
+Vehiculo <|-- Coche 
+
+' Composición: Coche crea internamente a Motor (this.motor = new Motor...)
+Coche *-- "1" Motor : Composición
+
+' Dependencia: Mecanico usa Coche temporalmente en su método reparar()
+Mecanico ..> Coche : Dependencia
+
+@enduml

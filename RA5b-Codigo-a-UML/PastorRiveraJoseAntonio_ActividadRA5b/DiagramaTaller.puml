@@ -1,0 +1,43 @@
+@startuml DiagramaTaller
+' Desactiva iconos para forzar los caracteres +, -, # (Criterio CE5a de la rúbrica)
+skinparam classAttributeIconSize 0
+
+abstract class Vehiculo {
+    # matricula: String
+    + Vehiculo(matricula: String)
+    + {abstract} arrancar(): void
+    + getMatricula(): String
+    + setMatricula(matricula: String): void
+}
+
+class Coche {
+    - motor: Motor
+    + Coche(matricula: String, caballos: int)
+    + arrancar(): void
+    + getMotor(): Motor
+}
+
+class Motor {
+    - caballos: int
+    - encendido: boolean
+    + Motor(caballos: int)
+    + encender(): void
+    + getCaballos(): int
+    + setCaballos(caballos: int): void
+    + isEncendido(): boolean
+}
+
+class Mecanico {
+    - nombre: String
+    + Mecanico(nombre: String)
+    + reparar(c: Coche): void
+    + getNombre(): String
+    + setNombre(nombre: String): void
+}
+
+' Relaciones
+Vehiculo <|-- Coche 
+Coche *-- "1" Motor : Composición
+Mecanico ..> Coche : Dependencia
+
+@enduml
