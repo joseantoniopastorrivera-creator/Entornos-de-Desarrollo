@@ -1,0 +1,53 @@
+' DUDA EXISTENCIAL: Hola Profe. Te subo el código del diagrama de actividades del onboarding que creo que ya tengo terminado 
+' con sus calles y sus fork/join correspondientes. Sin embargo, dándole vueltas a la lógica de negocio me ha surgido una duda
+' sobre cómo se modelaría esto en la realidad: Si estando dentro del paralelismo uno de los departamentos falla (por ejemplo, 
+' IT no puede crear el email porque el servidor está caído), el proceso se quedaría bloqueado para siempre en la barra 'Join' esperando.
+' ¿En UML existe alguna forma estándar de modelar una excepción o 'aborto' que rompa el fork y cancele el proceso entero si 
+' una calle da error grave? He estado investigando esto con una IA y me ha comentado lo siguiente: 'En el estándar UML formal
+' se usaría una Región de Actividad Interrumpible (una caja discontinua con una flecha de excepción en zigzag que destruye los 
+' tokens activos de las otras calles) o enviar el flujo de error directamente a un Nodo Final de Actividad (stop absoluto) para
+' matar todos los hilos. Además, parece ser que PlantUML no dibuja bien estas regiones y obliga a usar parches como el comando kill.'
+' Viendo esto... ¿No hay otra forma más eficiente o elegante de modelarlo en la vida real sin tener que recurrir a esos 'parches'? ¡Gracias!
+' Autor: José Antonio Pastor Rivera
+' Fecha: 16/04/2026
+' Actividad: RA6.3b - Onboarding de un nuevo empleado
+' Descripción: Diagrama de actividades. Modela la concurrencia y división
+' de responsabilidades mediante calles (swimlanes) y barras de sincronización.
+
+@startuml DiagramaOnboarding
+title RA6.3b Onboarding de un nuevo empleado
+' NOTA: Mantenemos el estándar visual monocromo.
+skinparam monochrome true
+
+' NOTA: Calles (swimlanes) que dividen el diagrama
+' para indicar quién es el responsable de hacer cada acción.
+|Recursos Humanos|
+start
+:Firmar Contrato;
+
+' NOTA: Barra de sincronización Fork (división).
+' Divide el camino en múltiples flujos que ocurren al mismo tiempo, en paralelo.
+fork
+    |Recursos Humanos|
+    :Alta en la Seguridad Social;
+
+fork again
+    |IT|
+    :Configurar portátil;
+    :Crear cuenta de email;
+
+fork again
+    |Manager|
+    :Asignar proyecto inicial;
+
+    ' NOTA: Barra de sincronización Join (unión).
+    ' Espera a que todos los flujos paralelos hayan terminado antes de continuar.
+end fork
+
+|Recursos Humanos|
+:Dar la bienvenida al nuevo empleado;
+
+' NOTA: Nodo de fin que indica dónde termina el proceso de forma definitiva.
+stop
+
+@enduml
