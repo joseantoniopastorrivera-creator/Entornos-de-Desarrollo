@@ -1,0 +1,42 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+--no-fonts
+-encoding
+'UTF-8'
+-protected
+-source
+'21'
+-sourcepath
+'c:/dev/Trabajo RA4b Entornos/proyecto-fenix/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2026. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'c:/dev/Trabajo RA4b Entornos/proyecto-fenix/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'proyecto-fenix 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'proyecto-fenix 1.0-SNAPSHOT API'
+com.fenix
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\src\main\java = 1767859005177
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\allclasses-index.html = 1767958241079
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\allpackages-index.html = 1767958241085
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\element-list = 1767958240971
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\help-doc.html = 1767958241155
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\index-all.html = 1767958241130
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\index.html = 1767958241144
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\member-search-index.js = 1767958241095
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\module-search-index.js = 1767958241088
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\overview-tree.html = 1767958241054
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\package-search-index.js = 1767958241089
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\search.html = 1767958241137
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\tag-search-index.js = 1767958241098
+c:\dev\Trabajo RA4b Entornos\proyecto-fenix\target\reports\apidocs\type-search-index.js = 1767958241092
