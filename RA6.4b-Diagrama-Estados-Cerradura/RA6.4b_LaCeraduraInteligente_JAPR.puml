@@ -1,0 +1,38 @@
+' Autor: José Antonio Pastor Rivera
+' Fecha: 20/04/2026
+' Actividad: RA6.4b - La cerradura inteligente
+' Descripción: Diagrama de estados que modela la lógica de seguridad de una 
+' cerradura electrónica. Representa un ciclo de trabajo infinito sin estado final,
+' aplicando transiciones reflexivas y evaluación estricta de condiciones de guarda.
+
+
+@startuml DiagramaCerradura
+title RA6.4b - Ciclo de seguridad de la cerradura inteligente
+
+' Formato visual requerido en monocromo para un acabado formal.
+skinparam monochrome true
+
+' He incluido 'hide empty description' para que el diagrama tenga un acabado más 
+' limpio, ya que elimina el recuadro en blanco innecesario que aparece dentro 
+' de los estados cuando no definimos acciones internas.
+hide empty description
+
+' Nodo de inicio (pseudo-estado inicial). La máquina nace bloqueada.
+[*] --> Bloqueada
+
+' 1. Transición Reflexiva (Denegación de acceso) 
+' Esta transición sale y entra al mismo estado. La condición de guarda 
+' [tarjeta inválida] evita la apertura y dispara la acción (/ pitar error).
+Bloqueada --> Bloqueada : pasar tarjeta [tarjeta inválida] / pitar error
+
+' 2. Transición de Apertura (Acceso concedido) 
+' Al cumplir la condición [tarjeta válida], se transita al estado de apertura
+' y se ejecuta la acción visual (/ encender luz verde) como respuesta del sistema.
+Bloqueada --> Desbloqueada : pasar tarjeta [tarjeta válida] / encender luz verde
+
+' 3. Retorno Automático (Temporizador) 
+' La cerradura es un sistema continuo por motivos de seguridad. Por ello, tras 
+' el temporizador, vuelve a su estado seguro sin llegar nunca a un estado final.
+Desbloqueada --> Bloqueada : pasar 5 segundos
+
+@enduml
