@@ -1,0 +1,57 @@
+' ===========================================================================
+' Autor: José Antonio Pastor Rivera
+' Fecha: 18/03/2026
+' Actividad: RA6.1a - El sistema de la biblioteca
+' Descripción: Diagrama de Casos de Uso. Modela la interacción de los socios
+' y bibliotecarios con el sistema, aplicando correctamente relaciones de
+' inclusión (obligatorias) y extensión (opcionales).
+' ===========================================================================
+
+@startuml DiagramaBiblioteca
+' NOTA TÉCNICA: Se activa el modo monocromo (blanco y negro) para eliminar los
+' colores por defecto de PlantUML. Esto genera un diagrama visualmente más
+' limpio, formal y estrictamente alineado con el estándar UML clásico.
+skinparam monochrome true
+' NOTA TÉCNICA: Se establece el flujo del diagrama de izquierda a derecha.
+' Esto optimiza el espacio horizontal y mejora drásticamente la legibilidad
+' de las relaciones entre los actores y los casos de uso.
+left to right direction
+
+actor "Socio" as S
+actor "Bibliotecario" as B
+
+' NOTA TÉCNICA: Se utiliza la directiva 'as' para asignar un alias interno a
+' cada caso de uso con el prefijo estándar 'UC_' (Use Case). Esto optimiza la
+' mantenibilidad del código: si el nombre público del caso de uso cambia en
+' el futuro, las relaciones lógicas del diagrama no se verán afectadas.
+rectangle "Sistema biblioteca" {
+    usecase "Prestar libro" as UC_Prestar
+    usecase "Devolver libro" as UC_Devolver
+    usecase "Dar de alta socio" as UC_Alta
+    usecase "Actualizar inventario" as UC_Actualizar
+    usecase "Cobrar multa" as UC_Multar
+}
+
+' NOTA TÉCNICA: Mapeo de interacciones primarias del negocio.
+' Se establecen las asociaciones básicas traduciendo los requisitos exactos:
+' el Socio opera exclusivamente sobre el ciclo de vida del libro (préstamo
+' y devolución), mientras que el Bibliotecario administra los usuarios (alta).
+S --> UC_Prestar
+S --> UC_Devolver
+B --> UC_Alta
+
+' NOTA TÉCNICA: Dependencias de inclusión obligatoria.
+' Se modela la delegación incondicional de tareas. Tanto el préstamo como la
+' devolución dependen estructuralmente de la actualización del sistema, por lo
+' que el caso base apunta directamente al caso incluido mediante <<include>>.
+UC_Prestar ..> UC_Actualizar : <<include>>
+UC_Devolver ..> UC_Actualizar : <<include>>
+
+' NOTA TÉCNICA: Dependencia de extensión opcional.
+' Se aplica para flujos alternativos que no siempre se ejecutan. Demostrando
+' el dominio de relaciones complejas, la flecha nace en el evento opcional
+' (Cobrar multa) y apunta al flujo principal (Devolver), indicando que la multa
+' amplía el comportamiento de la devolución bajo ciertas restricciones.
+UC_Multar ..> UC_Devolver : <<extend>>
+
+@enduml
